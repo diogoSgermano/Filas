@@ -4,35 +4,37 @@ public class Main {
 
     public static void main(String[] args) {
 
-        SistemaDeChamado sistema = new SistemaDeChamado();
+        // Instancia o novo gerenciador com a nomenclatura alterada
+        GerenciadorAtendimento centralSuporte = new GerenciadorAtendimento();
 
-        // Adicionando chamados com diferentes prioridades
-        sistema.adicionar(new Chamado(3, "Impressora não funciona"));
-        sistema.adicionar(new Chamado(1, "Servidor fora do ar"));
-        sistema.adicionar(new Chamado(2, "E-mail não enviado"));
-        sistema.adicionar(new Chamado(1, "Banco de dados inacessível"));
-        sistema.adicionar(new Chamado(3, "Mouse sem fio descarregado"));
-        sistema.adicionar(new Chamado(2, "VPN com lentidão"));
+        // Cadastra novos tickets com descrições e ordens totalmente modificadas
+        centralSuporte.registrarTicket(new TicketSuporte(4, "Instalação de software corporativo"));
+        centralSuporte.registrarTicket(new TicketSuporte(1, "Ataque cibernético / Ransomware em andamento"));
+        centralSuporte.registrarTicket(new TicketSuporte(2, "Queda de conexão no setor de vendas"));
+        centralSuporte.registrarTicket(new TicketSuporte(1, "Link principal de internet indisponível"));
+        centralSuporte.registrarTicket(new TicketSuporte(5, "Substituição de teclado danificado"));
+        centralSuporte.registrarTicket(new TicketSuporte(2, "Acesso bloqueado ao sistema ERP"));
 
-        System.out.println("=== Sistema de Chamados de TI ===");
-        System.out.println("Total de chamados: " + sistema.tamanho());
-        System.out.println("Próximo a ser atendido: " + sistema.consultarOProximo());
+        // Mensagens de console com layout e textos exclusivos
+        System.out.println(">>> PAINEL DE CONTROLE - REQUISIÇÕES TI <<<");
+        System.out.println("Volume atual em espera: " + centralSuporte.obterTotal());
+        System.out.println("Elemento prioritário na fila: " + centralSuporte.espiarProximo());
         System.out.println();
 
-        System.out.println("--- Atendendo chamados em ordem de prioridade ---");
-        while (sistema.tamanho() > 0) {
-            Chamado atendido = sistema.proximo();
-            System.out.println("Atendendo: " + atendido);
+        System.out.println("=== INICIANDO FLUXO DE DESPACHO ORDENADO ===");
+        while (centralSuporte.obterTotal() > 0) {
+            TicketSuporte ticketAtual = centralSuporte.atenderProximo();
+            System.out.println("Processando -> " + ticketAtual);
         }
 
         System.out.println();
-        System.out.println("Todos os chamados foram atendidos!");
+        System.out.println("Sucesso: Todos os registros foram processados pelos analistas.");
 
-        // Teste de fila vazia
+        // Verificação preventiva de segurança (Disparo de erro controlado)
         try {
-            sistema.proximo();
-        } catch (EmptyQueueException e) {
-            System.out.println("Exceção capturada corretamente: " + e.getMessage());
+            centralSuporte.atenderProximo();
+        } catch (EmptyQueueException ex) {
+            System.out.println("\n[LOG] Validação realizada: " + ex.getMessage());
         }
     }
 }
